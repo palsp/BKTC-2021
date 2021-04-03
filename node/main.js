@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const targetSymbol = "BKTC";
-
+const ether = 1000000000000000000;
 const getURL = (address) => {
   return `https://api-ropsten.etherscan.io/api?module=account&action=tokentx&address=${address}&startblock=0&endblock=999999999&sort=asc&apikey=K7ST5DC6VP2Z5ZVWWD1IB3JDB5AHIEV274`;
 };
