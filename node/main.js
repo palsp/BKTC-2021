@@ -26,13 +26,13 @@ const findRoute = async (address) => {
         TxHash: transaction.hash,
         from: transaction.from,
         to: transaction.to,
-        value: transaction.value,
+        value: transaction.value / ether,
       });
       // console.log(transaction.to);
       route = route.concat(await findRoute(transaction.to));
     }
     accountbalance[transaction.from] =
-      ((accountbalance[transaction.from] || 0) - transaction.value) / ether;
+      (accountbalance[transaction.from] || 0) - transaction.value / ether;
     accountbalance[transaction.to] =
       (accountbalance[transaction.to] || 0) + transaction.value / ether;
   }
@@ -61,7 +61,14 @@ const start = async () => {
   // ------------------ balance ---------------------------
   for (let i = 0; i < address.length; i++) {
     if (uniqueAddr[i] !== undefined) {
-      console.log(i + 1, uniqueAddr[i], accountbalance[uniqueAddr[i]]);
+      const balance = await axios.get(
+        `https://api-ropsten.etherscan.io/api?module=account&action=balance&address=${uniqueAddr[i]}&tag=latest&apikey=K7ST5DC6VP2Z5ZVWWD1IB3JDB5AHIEV274`
+      );
+      console.log(
+        i + 1,
+        uniqueAddr[i],
+        balance.data.result * Math.pow(10, -18)
+      );
     }
   }
 };
